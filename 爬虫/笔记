@@ -1,0 +1,27 @@
+
+Requests库的7个主要方法
+requests.request() //构造一个请求，支撑以下各方法的基础方法
+requests.get()	   //获取Html网页的主要方法，对应于HTTP的get
+requests.head()	   //获取html网页的头信息的方法，对应于HTTP的head
+requests.post()    //向html网页提交POST请求的方法，对应于HTTP的POST
+requests.put()	   //向html网页提交put请求方法，对应于HTTP的put
+requests.patch()	//向html网页提交局部修改请求，对应于HTTP的patch
+requests.delete()	//向html页面提交删除请求，对应于HTTP的delete
+
+
+
+r.status_code		//http请求的返回状态，200表示连接成功，404表示失败
+r.text				//http相应内容的字符串形式，即url对应的页面内容
+r.encoding 			//从http header中猜测响应内容编码方式
+r.apparent_encoding //从内容中分析出的响应内容的编码方式
+r.content 			//http响应内容的二进制形式
+
+
+requests库异常
+requests.ConnectionError //网络连接错误异常
+requests.HttpError 		 //HTTP错误异常
+requests.URLRequired  	 //URL缺失异常
+requests.TooManyRedirects//超过最大重定向次数，产生重定向异常
+requests.ConnectionTimeout//连接远程服务器超时异常
+requests.Timeout 		 // 请求URL超时，产生超时异常
+
