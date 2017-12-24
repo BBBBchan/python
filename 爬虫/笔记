@@ -37,8 +37,7 @@ requests.Timeout 		 // 请求URL超时，产生超时异常
 {m}				扩展前一个字符m次					ab{2}c表示abbc
 {m,n}			扩展前一个字符m次至n次（含）		ab{1,2}c表示abc,abbc
 ^				匹配字符串开头					^abc表示abc在一个字符串的开头
-$	
-			匹配字符串结尾					abc$表示abc在一个字符串的结尾
+$				匹配字符串结尾					abc$表示abc在一个字符串的结尾
 ()				分组标记，内部只能使用|操作符		(abc)表示abc， (abc|def)表示abc，def
 \d  			数字，等价于[0-9]
 \n				单词字符，等价于[A-Za-z0-9_]		
