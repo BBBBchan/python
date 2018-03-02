@@ -127,9 +127,12 @@ def my_range(first=0, last=0, step=1):		#自制的range函数
 	while number < last:
 		yield number
 		number+=step
-print(my_range)				#类型
+print(my_range)				#类型      
 ranger = my_range(1,5)
 print(ranger)				#返回生成器对象
 for x in ranger:			#使用
 	print(x)
+
+#装饰器
+
 
