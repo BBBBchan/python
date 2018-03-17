@@ -134,5 +134,42 @@ for x in ranger:			#使用
 	print(x)
 
 #装饰器
+def document_it(func):				#定义一个装饰器
+	def new_function(*args, **kwargs):
+		print('Running function:', func.__name__)
+		print('Positional arguments:', args)
+		print('keyword arguments:', kwargs)
+		result = func(*args, **kwargs)
+		print('Result:', result)
+		return result
+	return new_function
 
+def add_ints(a, b):
+	return a + b
+print(add_ints(3,5))
+cooler_add_int = document_it(add_ints)		#使用装饰器
+print(cooler_add_int(3,5))
 
+@document_it			#添加装饰器
+def add_int(a,b):
+	return a+b
+print(add_int(3,5))
+
+def square_it(func):
+	def new_function(*args, **kwargs):
+		result = func(*args, **kwargs)
+		return result*result
+	return new_function
+#使用多个装饰器的顺序
+@document_it
+@square_it
+def add_ints(a,b):
+	return a+b
+print(add_i
+	nts(3,5))
+
+@square_it
+@document_it
+def add_ints(a,b):
+	return a+b
+print(add_ints(3,5))
