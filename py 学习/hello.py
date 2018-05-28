@@ -1,2 +1,2 @@
 name = raw_input()
-print name
+print(name)
