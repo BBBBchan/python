@@ -1,26 +1,58 @@
 <!DOCTYPE HTML>
 <html>
-<style>
-a{ text-decoration: none;}
-div.p{
-	text-align:center; 
-	color:#FFB90F;}
+	<style>
+div.contbox{
+	text-align:center; }
+div.csize{
+	text-align:center;
+	font-size:30px;
+	color:#333;}
+div.footer{
+height: 100px;
+width: 100%;
+position: fixed;
+bottom: 0;
+text-align:center;
+}
+div.hint{
+	font-style:italic;
+	color:#aaa;
+	text-align:center;
+}
+input{                 border: 1px solid #ccc;
+                 padding: 7px 0px;
+                 border-radius: 3px;
+                 padding-left:5px;
+                 -webkit-box-shadow: 
+                 inset 0 1px 1px rgba(0,0,0,.075);                 
+                 box-shadow: inset 0 1px 1px rgba(0,0,0,.075);                 
+                 -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                 -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;          transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s             }             input:focus{                     border-color: #66afe9;                     outline: 0;                     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);                     box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)             }
 
+.login-button:hover { /* 鼠标移入按钮范围时改变颜色 */  
+    background: #5599FF;  
+}  
+body{
+        background-color:#F2F2F2;
+        opacity:1.00; 
+    }
 </style>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>注册你的信息~</title>
+<title>注册你的信息</title>
 </head>
 <body>
-	<body background = "../static/2.jpg">
-<form method="post" action="">
-<br><br><br><br><br><br><br><br><br><br><br><br><br>
-      <label for="username">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户名:</label>
+	<div class="contbox"><h2>注册</h2></div>
+	<br>
+  <img src="../static/小埋1.jpg" style="position:absolute; left:525px; top:175px; "/>
+	<form method="post" action="">
+      <label for="username" style="margin-left:400px;">用户名:</label>
       <input type="text"  name="username" id="username" value="" />
       <label for="password">密码:</label>
-      <input type="password"  name="password" id="password" value="" />    
+      <input type="password"  name="password" id="pass" value="" />    
       <input type="submit" value="确定"  name="submit" />
       <input type="reset" value="重置" name="reset" />{{error}}<br><br><br><br> 
-</form>  	
+	<div class="footer">nazo是一款解密游戏，这款nazo_BB-sund由孙博远负责后端，孙燮阳负责前端共同开发完成</div>
+</form>  
 </body>
 </html>

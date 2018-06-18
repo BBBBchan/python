@@ -35,21 +35,25 @@ input{                 border: 1px solid #ccc;
 body{
         background-color:#F2F2F2;
     }
+
 </style>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>第2关</title>
+<title>登陆继续闯关(ง •̀_•́)ง</title>
 </head>
 <body>
-	<div class="contbox"><h4>lv.2</h4></div>
-	<div class="csize"><sb>从右往左？</sb></div><br>
-	<div class="footer">nazo是一款解密游戏，这款nazo_BB-sund由孙博远负责后端，孙燮阳负责前端共同开发完成</div>
-	<div class="contbox">here is key</div>
-	<br>
-	<form method="post" action="">
-	<input name="ans" class="form-control" id="ans" required="required" type="text" maxlength="25" placeholder="start" value="" autocomplete="off" style="margin-left:550px; margin-top:20px">
-	<button class="btn btn-primary" type="submit">Go</button>{{error}}</form>
 
+	<div class="contbox"><h2>登陆</h2></div>
+	<br>
+	<img src="../static/小埋2.jpg" style="position:absolute; left:475px; top:175px; "/>
+	<form method="post" action="">
+      <label for="username" style="margin-left:400px;">用户名:</label>
+      <input type="text"  name="username" id="username" value=""  />
+      <label for="password">密码:</label>
+      <input type="password"  name="password" id="pass" value="" />    
+      <input type="submit" value="确定"  name="submit" />
+      <input type="reset" value="重置" name="reset" />{{error}}<br><br><br><br> 
+	<div class="footer">nazo是一款解密游戏，这款nazo_BB-sund由孙博远负责后端，孙燮阳负责前端共同开发完成</div>
 </form>  
 </body>
 </html>
