@@ -34,11 +34,12 @@ def index():
 @app.route('/levels/<int:current_level>', methods=['GET','POST'])
 def levels(current_level):
 	if 'username' in session:
+		curs = g.db.cursor()
+		curs.execute('''SELECT current_level FROM UserData where username=?''',[escape(session['username'])])
+		user_level = curs.fetchall()
+		user_level = user_level[0]['current_level']
 		if request.method == 'GET':
-			curs = g.db.cursor()
-			curs.execute('''SELECT current_level FROM UserData where username=?''',[escape(session['username'])])
-			user_level = curs.fetchall()
-			user_level = user_level[0]['current_level']
+			print(user_level)
 			if user_level >= current_level:
 				url = '/levels/'+str(current_level)+'.html'
 				return render_template(url)
@@ -57,8 +58,9 @@ def levels(current_level):
 				if current_level == 9:
 					return redirect('http://www.bbbbchan.com')
 				print(escape(session['username']))
-				curs.execute('''UPDATE UserData SET current_level = ? where username = ?''',[current_level,escape(session['username'])])
-				g.db.commit()
+				if current_level > user_level:
+					curs.execute('''UPDATE UserData SET current_level = ? where username = ?''',[current_level,escape(session['username'])])
+					g.db.commit()
 				url = 'levels/'+str(current_level)
 				return redirect(url)
 			else:
@@ -76,7 +78,6 @@ def login():
 		username = request.form.get('username')
 		password = request.form.get('password')
 		session['username'] = username
-		print(escape(session['username']))
 		curs = g.db.cursor()
 		curs.execute('''SELECT nid,username,password,current_level FROM UserData where username = ? ''',[username])
 		user_info = curs.fetchall()
