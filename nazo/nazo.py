@@ -7,7 +7,7 @@ app.secret_key = 'bbchan'
 app.debug = True
 
 def connect_db():
-    return sqlite3.connect('/UserData.db')
+    return sqlite3.connect('UserData.db')
 
 @app.before_request
 def before_request():
@@ -39,7 +39,6 @@ def levels(current_level):
 		user_level = curs.fetchall()
 		user_level = user_level[0]['current_level']
 		if request.method == 'GET':
-			print(user_level)
 			if user_level >= current_level:
 				url = '/levels/'+str(current_level)+'.html'
 				return render_template(url)
@@ -57,7 +56,6 @@ def levels(current_level):
 				current_level += 1
 				if current_level == 9:
 					return redirect('http://www.bbbbchan.com')
-				print(escape(session['username']))
 				if current_level > user_level:
 					curs.execute('''UPDATE UserData SET current_level = ? where username = ?''',[current_level,escape(session['username'])])
 					g.db.commit()
