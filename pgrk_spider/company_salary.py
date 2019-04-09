@@ -3,8 +3,10 @@ import time
 import pymysql
 from bs4 import BeautifulSoup
 
-all_language = ['C%2B%2B','Java','Python','Javascript','R语言','Go','Matlab','Scala','VB.NET','SQL','Objective-C','C','Ruby','PHP','汇编','C%23']
-now_company = '迅雷'
+all_language = ['C%2B%2B', 'Java', 'Python', 'Javascript', 'R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL', 'Objective-C', 'C', 'Ruby', 'PHP', '汇编', 'C%23']
+now_company = '金山'
+
+
 class spider:
     def __init__(self):
         self.data = []
@@ -62,13 +64,13 @@ class spider:
             j = 0
             temp1 = ''
             temp2 = ''
-            if int(self.company[i].find('迅雷')) == -1 and int(self.company[i].find('xunlei') == -1) and int(self.company[i].find('迅雷') == -1) and int(self.company[i].find('XunLei') == -1) or int(self.job[i].find('产品') != -1) :
+            if int(self.company[i].find('金山')) == -1 and int(self.company[i].find('jinshan') == -1) and int(self.company[i].find('金山') == -1) and int(self.company[i].find('金山') == -1) or int(self.job[i].find('产品') != -1) or int(self.job[i].find('C端') != -1) or int(self.job[i].find('编辑') != -1) :
                 continue
             self.count+=1
             while self.money[i][j] != 'k':
                 temp1 += self.money[i][j]
                 j+=1
-            all_money += int(temp1)
+
             if int(temp1) < self.min_money:
                 self.min_money = int(temp1)
                 self.min_moneyjob = self.job[i]
@@ -76,12 +78,13 @@ class spider:
             while self.money[i][j] != 'k':
                 temp2 += self.money[i][j]
                 j += 1
-            all_money += int(temp2)
+            all_money += int(temp1) + (int(temp2) - int(temp1)) * 0.1
+          #  all_money += int(temp2)
             if int(temp2) > self.max_money:
                 self.max_money = int(temp2)
                 self.max_moneyjob = self.job[i]
         if self.count != 0:
-            all_money /= 2*self.count
+            all_money /= self.count
             self.average = all_money
 
     def renew(self):
@@ -118,7 +121,7 @@ if __name__ == '__main__':
         Max_job = ''
         All_money = 0
         count = 0
-        print(Min_money,Max_money)
+        print(Min_money, Max_money)
         spider.url = 'https://www.zhipin.com/c100010000/?query='+now_language+'+'+now_company+'&page=1&ka=page-1'
         for i in range(11):
             print(spider.url)
@@ -150,13 +153,13 @@ if __name__ == '__main__':
         # Min = min(Min_money)
         # Max = max(Max_money)
         print(Average)
-        print(Min,Min_job)
-        print(Max,Max_job)
+        print(Min, Min_job)
+        print(Max, Max_job)
 
        # 数据库相关
-        conn = pymysql.connect(host='47.105.192.87',port=3333,user='pgrk',passwd='wizz.pgrk',db='pgrk')
+        conn = pymysql.connect(host='47.105.192.87', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk')
         cursor = conn.cursor()
-        cursor.execute("insert into company_salary(language_name, company_name, company_ord_salary, company_max_salary,company_max_salary_post, company_min_salary, company_min_salary_post) values('%s','%s','%d','%d','%s','%d','%s')"%(now_language,now_company,Average,Max,Max_job,Min,Min_job))
+        cursor.execute("insert into company_salary(language_name, company_name, company_ord_salary, company_max_salary, company_max_salary_post, company_min_salary, company_min_salary_post) values('%s', '%s', '%d', '%d', '%s', '%d', '%s')"%(now_language,now_company,Average,Max,Max_job,Min,Min_job))
         conn.commit()
 
         time.sleep(5)
