@@ -3,8 +3,9 @@ import time
 import pymysql
 from bs4 import BeautifulSoup
 
-all_language = ['C%2B%2B', 'Java', 'Python', 'Javascript', 'R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL', 'Objective-C', 'C', 'Ruby', 'PHP', '汇编', 'C%23']
-now_company = '金山'
+all_language = ['C%2B%2B', 'Java', 'Python', 'Javascript', 'R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL',
+                'Objective-C', 'C', 'Ruby', 'PHP', '汇编', 'C%23']
+now_company = '唯品会'
 
 
 class spider:
@@ -50,7 +51,6 @@ class spider:
             self.money.append(table_money[int((i - 1) / 3)].text)
             i += 3
 
-
     def gather(self):
         i = 0
         while i < len(self.company):
@@ -64,12 +64,13 @@ class spider:
             j = 0
             temp1 = ''
             temp2 = ''
-            if int(self.company[i].find('金山')) == -1 and int(self.company[i].find('jinshan') == -1) and int(self.company[i].find('金山') == -1) and int(self.company[i].find('金山') == -1) or int(self.job[i].find('产品') != -1) or int(self.job[i].find('C端') != -1) or int(self.job[i].find('编辑') != -1) :
+            if int(self.company[i].find('唯品会')) == -1 and int(self.company[i].find('唯品会') == -1) and \
+                    int(self.company[i].find('唯品会') == -1) and int(self.company[i].find('唯品会') == -1) or int(self.job[i].find('产品') != -1) or int(self.job[i].find('C端') != -1) or int(self.job[i].find('编辑') != -1) :
                 continue
-            self.count+=1
+            self.count += 1
             while self.money[i][j] != 'k':
                 temp1 += self.money[i][j]
-                j+=1
+                j += 1
 
             if int(temp1) < self.min_money:
                 self.min_money = int(temp1)
@@ -102,12 +103,14 @@ class spider:
         self.average = 0
         self.count = 0
 
+
 def set_url(page):
     now_url = spider.url
     new = 'page='+str(page)+'&ka=page-'+str(page)
     now_url = now_url[:int(now_url.find('page'))]
     now_url += new
     spider.url = now_url
+
 
 if __name__ == '__main__':
     spider = spider()
