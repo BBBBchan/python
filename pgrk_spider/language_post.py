@@ -118,7 +118,6 @@ if __name__ == '__main__':
                 else:
                     k += 1
             if k == count:
-                print('here2')
                 job.append(spider.job[j])
                 salary.append(spider.money[j])
                 language.append(i)
@@ -131,8 +130,8 @@ if __name__ == '__main__':
     for i in range(len(job)):
         print(language[i],job[i],salary[i])
 
-    conn = pymysql.connect(host='47.105.192.87', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk')
+    conn = pymysql.connect(host='mysql.wizzstudio.com', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk_rel_1')
     cursor = conn.cursor()
     for i in range(len(job)):
-        cursor.execute("insert into language_post(language_name, language_post, post_salary,post_number) values('%s','%s','%s',0)" % (language[i],job[i],salary[i]))
+        cursor.execute("update language_post set language_name = '%s', language_post = '%s', post_salary = '%s' ,post_number = 0 " % (language[i],job[i],salary[i]))
     conn.commit()

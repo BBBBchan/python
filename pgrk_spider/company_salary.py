@@ -3,9 +3,11 @@ import time
 import pymysql
 from bs4 import BeautifulSoup
 
-all_language = ['C%2B%2B', 'Java', 'Python', 'Javascript', 'R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL',
+all_language = ['C%2B%2B','Java','Python','R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL',
                 'Objective-C', 'C', 'Ruby', 'PHP', '汇编', 'C%23']
-now_company = '唯品会'
+all_company = ['字节跳动', '阿里巴巴', '华为', '腾讯', '金山', '百度' ,'京东', '滴滴出行', '小米', '360'\
+                '美团', '网易', '拼多多', '携程', '新浪', '苏宁易购', '快手', '唯品会', '陆金所', '科大讯飞'\
+                '58', '汽车之家', '爱奇艺', '链家网', '哔哩哔哩', '斗鱼', '迅雷']
 
 
 class spider:
@@ -61,11 +63,18 @@ class spider:
     def money_trans(self):
         all_money = 0
         for i in range(len(self.money)):
+            now_company_temp = now_company
             j = 0
             temp1 = ''
             temp2 = ''
-            if int(self.company[i].find('唯品会')) == -1 and int(self.company[i].find('唯品会') == -1) and \
-                    int(self.company[i].find('唯品会') == -1) and int(self.company[i].find('唯品会') == -1) or int(self.job[i].find('产品') != -1) or int(self.job[i].find('C端') != -1) or int(self.job[i].find('编辑') != -1) :
+            if now_company_temp == '字节跳动':
+                now_company_temp = '今日头条'
+            elif now_company_temp == '阿里巴巴':
+                now_company_temp = '阿里'
+            elif now_company_temp == '哔哩哔哩':
+                now_company_temp = 'bilibili'
+            if int(self.company[i].find(now_company)) == -1 and self.company[i].find(now_company_temp) \
+                    or int(self.job[i].find('产品') != -1) or int(self.job[i].find('C端') != -1) or int(self.job[i].find('编辑') != -1) :
                 continue
             self.count += 1
             while self.money[i][j] != 'k':
@@ -114,55 +123,68 @@ def set_url(page):
 
 if __name__ == '__main__':
     spider = spider()
-    for now_language in all_language:
-        print(now_language)
-        Min_money = []
-        Max_money = []
-        Min = 10000
-        Min_job = ''
-        Max = 0
-        Max_job = ''
-        All_money = 0
-        count = 0
-        print(Min_money, Max_money)
-        spider.url = 'https://www.zhipin.com/c100010000/?query='+now_language+'+'+now_company+'&page=1&ka=page-1'
-        for i in range(11):
-            print(spider.url)
-            set_url(i)
-            spider.get_it()
-            spider.gather()
-            spider.money_trans()
-            Min_money.append(spider.min_money)
-            Max_money.append(spider.max_money)
-            All_money += spider.average*spider.count
-            count += spider.count
-            if spider.min_money < Min:
-                Min = spider.min_money
-                Min_job = spider.min_moneyjob
-            if spider.max_money > Max:
+    for now_company in all_company:
+        for now_language in all_language:
+            print(now_language)
+            Min_money = []
+            Max_money = []
+            Min = 10000
+            Min_job = ''
+            Max = 0
+            Max_job = ''
+            All_money = 0
+            count = 0
+            print(Min_money, Max_money)
+            spider.url = 'https://www.zhipin.com/c100010000/?query='+now_language+'+'+now_company+'&page=1&ka=page-1'
+            for i in range(1,9):
+                print(spider.url)
+                set_url(i)
+                spider.get_it()
+                spider.gather()
+                spider.money_trans()
+                Min_money.append(spider.min_money)
+                Max_money.append(spider.max_money)
+                All_money += spider.average*spider.count
+                count += spider.count
+                if spider.min_money < Min:
+                    Min = spider.min_money
+                    Min_job = spider.min_moneyjob
+                if spider.max_money > Max:
 
-                Max = spider.max_money
-                Max_job = spider.max_moneyjob
-                print(Max_job)
-            # Min_money.append(spider.min_money)
-            # Max_money.append(spider.max_money)
-            spider.renew()
-            time.sleep(5)
-        if count != 0:
-            Average = int(All_money/count)
-        else:
-            Average = 0
-            Min = 0
-        # Min = min(Min_money)
-        # Max = max(Max_money)
-        print(Average)
-        print(Min, Min_job)
-        print(Max, Max_job)
+                    Max = spider.max_money
+                    Max_job = spider.max_moneyjob
+                    print(Max_job)
+                # Min_money.append(spider.min_money)
+                # Max_money.append(spider.max_money)
+                spider.renew()
+                time.sleep(60)
+            if count != 0:
+                Average = int(All_money/count)
+            else:
+                Average = 0
+                Min = 0
+            # Min = min(Min_money)
+            # Max = max(Max_money)
+            print(Average)
+            print(Min, Min_job)
+            print(Max, Max_job)
+            if now_language == 'R语言':
+                now_language = 'R'
+            elif now_language == '汇编':
+                now_language = 'Assembly'
+            elif now_language == 'C%2B%2B':
+                now_language = 'C++'
+            elif now_language == 'C%23':
+                now_language = 'C#'
+            elif now_language == 'C':
+                Max = 0.9*Max
+                Min = 0.9*Min
+                
+           # 数据库相关
+            conn = pymysql.connect(host='mysql.wizzstudio.com', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk_rel_1')
+            cursor = conn.cursor()
+            # cursor.execute("insert into company_salary(language_name, company_name, company_ord_salary, company_max_salary, company_max_salary_post, company_min_salary, company_min_salary_post) values('%s', '%s', '%d', '%d', '%s', '%d', '%s')"%(now_language,now_company,Average,Max,Max_job,Min,Min_job))
+            cursor.execute("update company_salary set company_ord_salary='%d',company_max_salary='%d',company_max_salary_post='%s',company_min_salary='%d',company_min_salary_post='%s' where language_name = '%s' and company_name = '%s' " % (Average,Max,Max_job,Min,Min_job,now_language,now_company))
+            conn.commit()
 
-       # 数据库相关
-        conn = pymysql.connect(host='47.105.192.87', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk')
-        cursor = conn.cursor()
-        cursor.execute("insert into company_salary(language_name, company_name, company_ord_salary, company_max_salary, company_max_salary_post, company_min_salary, company_min_salary_post) values('%s', '%s', '%d', '%d', '%s', '%d', '%s')"%(now_language,now_company,Average,Max,Max_job,Min,Min_job))
-        conn.commit()
-
-        time.sleep(5)
+            time.sleep(120)

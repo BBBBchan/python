@@ -59,7 +59,7 @@ def main():
         count+=1
 
 
-    conn = pymysql.connect(host='47.105.192.87', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk')
+    conn = pymysql.connect(host='mysql.wizzstudio.com', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk_rel_1')
     cursor = conn.cursor()
     i= 0
     while i < len(language):
