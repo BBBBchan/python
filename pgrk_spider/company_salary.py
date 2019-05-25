@@ -1,6 +1,5 @@
 import requests
 import time
-import pymysql
 from bs4 import BeautifulSoup
 
 all_language = ['C%2B%2B','Java','Python','R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL',
@@ -77,15 +76,15 @@ class spider:
                     or int(self.job[i].find('产品') != -1) or int(self.job[i].find('C端') != -1) or int(self.job[i].find('编辑') != -1) :
                 continue
             self.count += 1
-            while self.money[i][j] != 'k':
+            while self.money[i][j] != '-':
                 temp1 += self.money[i][j]
                 j += 1
 
             if int(temp1) < self.min_money:
                 self.min_money = int(temp1)
                 self.min_moneyjob = self.job[i]
-            j += 2
-            while self.money[i][j] != 'k':
+            j += 1
+            while self.money[i][j] != 'K':
                 temp2 += self.money[i][j]
                 j += 1
             all_money += int(temp1) + (int(temp2) - int(temp1)) * 0.1
