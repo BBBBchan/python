@@ -1,12 +1,15 @@
 import requests
 import time
 from bs4 import BeautifulSoup
+import random
+import pymysql
 
 all_language = ['C%2B%2B','Java','Python','R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL',
                 'Objective-C', 'C', 'Ruby', 'PHP', '汇编', 'C%23']
 all_company = ['字节跳动', '阿里巴巴', '华为', '腾讯', '金山', '百度' ,'京东', '滴滴出行', '小米', '360'\
                 '美团', '网易', '拼多多', '携程', '新浪', '苏宁易购', '快手', '唯品会', '陆金所', '科大讯飞'\
                 '58', '汽车之家', '爱奇艺', '链家网', '哔哩哔哩', '斗鱼', '迅雷']
+
 
 
 class spider:
@@ -25,11 +28,13 @@ class spider:
         self.min_moneyjob = ''
         self.average = 0
         self.count = 0
+        self.proxies = ''
 
     def get_it(self):
         self.headers[
             'user-agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
                             'Chrome/60.0.3112.78 Safari/537.36 '
+        res = requests.get(self.url, headers=self.headers)
         res = requests.get(self.url, headers=self.headers)
         soup = BeautifulSoup(res.text, 'html.parser')
         self.status = res.status_code
@@ -48,9 +53,12 @@ class spider:
         i = 1
         while i < len(table_company):
             self.company.append(table_company[i].text)
-            self.job.append(table_job[int((i - 1) / 3)].text)
-            self.money.append(table_money[int((i - 1) / 3)].text)
-            i += 3
+            i += 2
+        i = 0
+        while i < len(table_job):
+            self.job.append(table_job[i].text)
+            self.money.append(table_money[i].text)
+            i+=1
 
     def gather(self):
         i = 0
@@ -76,19 +84,23 @@ class spider:
                     or int(self.job[i].find('产品') != -1) or int(self.job[i].find('C端') != -1) or int(self.job[i].find('编辑') != -1) :
                 continue
             self.count += 1
-            while self.money[i][j] != '-':
+
+            while j < len(self.money[i]) and self.money[i][j] != '-':
                 temp1 += self.money[i][j]
                 j += 1
-
+            j += 1
+            while j < len(self.money[i]) and self.money[i][j] != 'K':
+                temp2 += self.money[i][j]
+                j += 1
+            try:
+                all_money += int(temp1) + (int(temp2) - int(temp1)) * 0.1
+            except:
+            	print('here')
+            	continue
+          #  all_money += int(temp2)
             if int(temp1) < self.min_money:
                 self.min_money = int(temp1)
                 self.min_moneyjob = self.job[i]
-            j += 1
-            while self.money[i][j] != 'K':
-                temp2 += self.money[i][j]
-                j += 1
-            all_money += int(temp1) + (int(temp2) - int(temp1)) * 0.1
-          #  all_money += int(temp2)
             if int(temp2) > self.max_money:
                 self.max_money = int(temp2)
                 self.max_moneyjob = self.job[i]
@@ -121,6 +133,8 @@ def set_url(page):
 
 
 if __name__ == '__main__':
+    localtime = time.asctime( time.localtime(time.time()) )
+    print('开始执行时间: ', localtime)
     spider = spider()
     for now_company in all_company:
         for now_language in all_language:
@@ -133,9 +147,8 @@ if __name__ == '__main__':
             Max_job = ''
             All_money = 0
             count = 0
-            print(Min_money, Max_money)
             spider.url = 'https://www.zhipin.com/c100010000/?query='+now_language+'+'+now_company+'&page=1&ka=page-1'
-            for i in range(1,9):
+            for i in range(2,9):
                 print(spider.url)
                 set_url(i)
                 spider.get_it()
@@ -152,11 +165,10 @@ if __name__ == '__main__':
 
                     Max = spider.max_money
                     Max_job = spider.max_moneyjob
-                    print(Max_job)
                 # Min_money.append(spider.min_money)
                 # Max_money.append(spider.max_money)
                 spider.renew()
-                time.sleep(60)
+                time.sleep(random.randrange(60, 90))
             if count != 0:
                 Average = int(All_money/count)
             else:
@@ -164,9 +176,6 @@ if __name__ == '__main__':
                 Min = 0
             # Min = min(Min_money)
             # Max = max(Max_money)
-            print(Average)
-            print(Min, Min_job)
-            print(Max, Max_job)
             if now_language == 'R语言':
                 now_language = 'R'
             elif now_language == '汇编':
@@ -185,5 +194,7 @@ if __name__ == '__main__':
             # cursor.execute("insert into company_salary(language_name, company_name, company_ord_salary, company_max_salary, company_max_salary_post, company_min_salary, company_min_salary_post) values('%s', '%s', '%d', '%d', '%s', '%d', '%s')"%(now_language,now_company,Average,Max,Max_job,Min,Min_job))
             cursor.execute("update company_salary set company_ord_salary='%d',company_max_salary='%d',company_max_salary_post='%s',company_min_salary='%d',company_min_salary_post='%s' where language_name = '%s' and company_name = '%s' " % (Average,Max,Max_job,Min,Min_job,now_language,now_company))
             conn.commit()
-
-            time.sleep(120)
+            localtime = time.asctime( time.localtime(time.time()) )
+            print('当前时间: ', localtime)
+            print('写入数据: ', now_company, now_language,Max, Max_job, Min, Min_job)
+            time.sleep(random.randrange(120, 140))
