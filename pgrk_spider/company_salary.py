@@ -4,17 +4,17 @@ from bs4 import BeautifulSoup
 import random
 import pymysql
 
-all_language = ['C%2B%2B','Java','Python','R语言', 'Go', 'Matlab', 'Scala', 'VB.NET', 'SQL',
-                'Objective-C', 'C', 'Ruby', 'PHP', '汇编', 'C%23']
-all_company = ['字节跳动', '阿里巴巴', '华为', '腾讯', '金山', '百度' ,'京东', '滴滴出行', '小米', '360'\
-                '美团', '网易', '拼多多', '携程', '新浪', '苏宁易购', '快手', '唯品会', '陆金所', '科大讯飞'\
-                '58', '汽车之家', '爱奇艺', '链家网', '哔哩哔哩', '斗鱼', '迅雷']
+all_language = [  'JavaScript','PHP','C', 'Ruby','C%2B%2B', 'Java',
+                'Objective-C','Python','Matlab', 'Scala', 'SQL','Go', 'R语言', '汇编', 'C%23', 'VB.NET']
+all_company = [  '网易','美团','华为', '腾讯', '金山', '百度','360'\
+                   '携程', '新浪', '苏宁易购','拼多多',  '唯品会', '陆金所', '科大讯飞'\
+                '58', '滴滴出行','快手', '小米','汽车之家', '爱奇艺', '链家网', '哔哩哔哩', '斗鱼', '迅雷','字节跳动', '京东','阿里巴巴',  ]
 
 
 
 class spider:
     def __init__(self):
-        self.data = []
+        self.data = [] 
         self.company = []
         self.job = []
         self.money = []
@@ -32,8 +32,7 @@ class spider:
 
     def get_it(self):
         self.headers[
-            'user-agent'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ' \
-                            'Chrome/60.0.3112.78 Safari/537.36 '
+            'user-agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36 '
         res = requests.get(self.url, headers=self.headers)
         res = requests.get(self.url, headers=self.headers)
         soup = BeautifulSoup(res.text, 'html.parser')
@@ -59,7 +58,6 @@ class spider:
             self.job.append(table_job[i].text)
             self.money.append(table_money[i].text)
             i+=1
-
     def gather(self):
         i = 0
         while i < len(self.company):
@@ -148,7 +146,7 @@ if __name__ == '__main__':
             All_money = 0
             count = 0
             spider.url = 'https://www.zhipin.com/c100010000/?query='+now_language+'+'+now_company+'&page=1&ka=page-1'
-            for i in range(2,9):
+            for i in range(1,6):
                 print(spider.url)
                 set_url(i)
                 spider.get_it()
@@ -162,13 +160,12 @@ if __name__ == '__main__':
                     Min = spider.min_money
                     Min_job = spider.min_moneyjob
                 if spider.max_money > Max:
-
                     Max = spider.max_money
                     Max_job = spider.max_moneyjob
                 # Min_money.append(spider.min_money)
                 # Max_money.append(spider.max_money)
                 spider.renew()
-                time.sleep(random.randrange(60, 90))
+                time.sleep(65)
             if count != 0:
                 Average = int(All_money/count)
             else:
@@ -189,7 +186,7 @@ if __name__ == '__main__':
                 Min = 0.9*Min
                 
            # 数据库相关
-            conn = pymysql.connect(host='mysql.wizzstudio.com', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk_rel_1')
+            conn = pymysql.connect(host='mysql.wizzstudio.com', port=3333, user='pgrk', passwd='wizz.pgrk', db='pgrk_rel_2')
             cursor = conn.cursor()
             # cursor.execute("insert into company_salary(language_name, company_name, company_ord_salary, company_max_salary, company_max_salary_post, company_min_salary, company_min_salary_post) values('%s', '%s', '%d', '%d', '%s', '%d', '%s')"%(now_language,now_company,Average,Max,Max_job,Min,Min_job))
             cursor.execute("update company_salary set company_ord_salary='%d',company_max_salary='%d',company_max_salary_post='%s',company_min_salary='%d',company_min_salary_post='%s' where language_name = '%s' and company_name = '%s' " % (Average,Max,Max_job,Min,Min_job,now_language,now_company))
@@ -197,4 +194,4 @@ if __name__ == '__main__':
             localtime = time.asctime( time.localtime(time.time()) )
             print('当前时间: ', localtime)
             print('写入数据: ', now_company, now_language,Max, Max_job, Min, Min_job)
-            time.sleep(random.randrange(120, 140))
+            time.sleep(100)

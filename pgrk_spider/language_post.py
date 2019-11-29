@@ -3,8 +3,8 @@ import time
 import pymysql
 from bs4 import BeautifulSoup
 
-all_language = ['C%2B%2B','Java','Python','JavaScript','Go','Scala','SQL','C','PHP']
-other_language = ['R语言','Matlab','VB.NET','Objective-C','Ruby','汇编','C%23']
+all_language = ['C%2B%2B','Java','Python','JavaScript','Go','C','PHP']
+other_language = ['R语言','Matlab','VB.NET','Objective-C','Ruby','汇编','C%23','SQL','Scala']
 class spider():
     def __init__(self):
         self.data = []
@@ -100,6 +100,10 @@ if __name__ == '__main__':
     for i in other_language:
         if i == 'C%23':
             spider.url = 'https://www.zhipin.com/c100010000/y_6/?query=C%23&page=1&ka=page-1'
+        elif i == 'SQL':
+            spider.url = 'https://www.zhipin.com/c100010000/y_6-s_306/?query=SQL&ka=sel-salary-6'
+        elif i == 'Scala':
+            spider.url = 'https://www.zhipin.com/c100010000/s_306/?query=scala&ka=sel-scale-306'
         else:
             set_url(i)
         print(spider.url)
